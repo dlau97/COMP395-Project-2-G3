@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public bool isDrawing = false;
+    public GameObject currentPole;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +17,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetMouseButtonUp(0))
         {
-            CircuitComplete(GameObject.FindGameObjectWithTag("Battery"));
+            //CircuitComplete(GameObject.FindGameObjectWithTag("Battery"));
         }
     }
 

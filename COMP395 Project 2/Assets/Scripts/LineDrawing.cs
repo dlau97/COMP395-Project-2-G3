@@ -18,14 +18,18 @@ public class LineDrawing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && gameObject.CompareTag("Positive"))
         {
-            manager.isDrawing = true;
-            isDrawing = true;
-            currentLine = Instantiate(line);
-            Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f);
-            Vector3[] vArray = { transform.position, Camera.main.ScreenToWorldPoint(mousePos) };
-            currentLine.GetComponent<LineRenderer>().SetPositions(vArray);
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z + 10f));
+            if (1 > Vector2.Distance(transform.position, mousePos))
+            {
+                manager.isDrawing = true;
+                manager.currentPole = gameObject;
+                isDrawing = true;
+                currentLine = Instantiate(line);
+                Vector3[] vArray = { transform.position, Camera.main.ScreenToWorldPoint(mousePos) };
+                currentLine.GetComponent<LineRenderer>().SetPositions(vArray);
+            }
         }
         if (isDrawing)
         {
@@ -34,9 +38,28 @@ public class LineDrawing : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         {
-            manager.isDrawing = false;
-            isDrawing = false;
-            Destroy(currentLine);
+            if (gameObject.CompareTag("Negative"))
+            {
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z + 10f));
+                if (1 > Vector2.Distance(transform.position, mousePos))
+                {
+                    manager.currentPole.GetComponent<LineDrawing>().SetNext(gameObject);
+                }
+            } else
+            {
+                manager.isDrawing = false;
+                isDrawing = false;
+                Destroy(currentLine);
+            }
         }
+    }
+
+    public void SetNext(GameObject next)
+    {
+        connected = next;
+        GameObject tempLine = Instantiate(line);
+        tempLine.GetComponent<LineRenderer>().SetPosition(0, transform.position);
+        tempLine.GetComponent<LineRenderer>().SetPosition(1, next.transform.position);
+        manager.currentPole = null;
     }
 }
