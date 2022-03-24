@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2213854683205273899}
   m_Layer: 0
   m_Name: Pole
-  m_TagString: Untagged
+  m_TagString: Positive
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,3 +110,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   line: {fileID: 1088302991482775971, guid: b2b563222a21a9c4082fbdd232e88104, type: 3}
+  connected: {fileID: 0}
