@@ -310,6 +310,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lightbulb
       objectReference: {fileID: 0}
+    - target: {fileID: 265001459591728263, guid: c704ee349d8b84a4787e0ed66b26e1fe, type: 3}
+      propertyPath: m_TagString
+      value: Lightbulb
+      objectReference: {fileID: 0}
     - target: {fileID: 5847026354006037568, guid: c704ee349d8b84a4787e0ed66b26e1fe, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -466,6 +470,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2924428835154390452, guid: 4e05654f16a464a4ea38986dccaf38cc, type: 3}
       propertyPath: m_Name
+      value: Resistor
+      objectReference: {fileID: 0}
+    - target: {fileID: 2924428835154390452, guid: 4e05654f16a464a4ea38986dccaf38cc, type: 3}
+      propertyPath: m_TagString
       value: Resistor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
