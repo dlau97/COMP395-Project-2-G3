@@ -5,18 +5,19 @@ using UnityEngine;
 public class CircuitController : MonoBehaviour
 {
     public dynamic component;
+    public float value = 0;
     // Start is called before the first frame update
     void Start()
     {
         if (gameObject.CompareTag("Battery"))
         {
-            component = new BatteryController(9);
+            component = new BatteryController(value);
         } else if (gameObject.CompareTag("Resistor"))
         {
-            component = new ResistorController(10);
+            component = new ResistorController(value);
         } else if (gameObject.CompareTag("Bulb"))
         {
-            component = new LightbulbController(1);
+            component = new LightbulbController(value);
         }
         else
         {
@@ -51,8 +52,9 @@ public class CircuitController : MonoBehaviour
     public bool CheckCircuit()
     {
         GameObject currObj = component.getNextComponent();
-        int resistance = 0;
-        int voltage = component.getVoltage();
+        float resistance = 0;
+        float resistanceWBulbs = 0;
+        float voltage = component.getVoltage();
         List<GameObject> bulbs = new List<GameObject>();
         while (gameObject != currObj)
         {
@@ -71,9 +73,14 @@ public class CircuitController : MonoBehaviour
             }
             currObj = currObj.GetComponent<CircuitController>().GetNext();
         }
+        resistanceWBulbs = resistance;
         foreach (GameObject bulb in bulbs)
         {
-            bulb.GetComponent<CircuitController>().component.setBrightness(Mathf.Pow(voltage / resistance, 2) * resistance);
+            resistanceWBulbs += bulb.GetComponent<CircuitController>().component.getResistance(voltage);
+        }
+        foreach (GameObject bulb in bulbs)
+        {
+            bulb.GetComponent<CircuitController>().component.setBrightness(Mathf.Pow(voltage / resistanceWBulbs, 2) * (resistance + bulb.GetComponent<CircuitController>().component.getResistance(voltage)));
         }
         return true;
     }

@@ -4,23 +4,23 @@ using UnityEngine;
 
 public class ResistorController : CircuitComponent
 {
-    public int resistance = 100;
+    public float resistance = 100;
 
-    public ResistorController(int r){
+    public ResistorController(float r){
         resistance = r;
         nextComponent = null;
     }
 
-    public ResistorController(int r, GameObject nextObj){
+    public ResistorController(float r, GameObject nextObj){
         resistance = r;
         nextComponent = nextObj;
     }
 
-    public int getResistance(){
+    public float getResistance(){
         return resistance;
     }
 
-    public void setResistance(int r){
+    public void setResistance(float r){
         resistance = r;
     }
 }

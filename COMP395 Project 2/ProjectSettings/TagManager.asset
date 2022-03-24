@@ -8,8 +8,8 @@ TagManager:
   - Positive
   - Negative
   - Battery
-  - Lightbulb
   - Resistor
+  - Bulb
   layers:
   - Default
   - TransparentFX

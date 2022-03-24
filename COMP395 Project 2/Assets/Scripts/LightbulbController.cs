@@ -8,13 +8,14 @@ public class LightbulbController : CircuitComponent
     public float brightness = 1; //1 = Max brightness, 0 = min brightness
     public float watts = 40f;
 
-    public LightbulbController(float b = 1f){
-        brightness = b;
+    public LightbulbController(float w = 40f){
+        watts = w;
         nextComponent = null;
     }
 
-    public LightbulbController(float b = 1f, GameObject nextObj = null){
-        brightness = b;
+    public LightbulbController(float w = 40f, GameObject nextObj = null)
+    {
+        watts = w;
         nextComponent = nextObj;
     }
 
@@ -33,5 +34,10 @@ public class LightbulbController : CircuitComponent
     public float getWatts()
     {
         return watts;
+    }
+
+    public float getResistance(float voltage)
+    {
+        return Mathf.Pow(voltage, 2) / watts;
     }
 }
