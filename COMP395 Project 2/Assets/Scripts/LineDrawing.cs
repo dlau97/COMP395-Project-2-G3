@@ -8,6 +8,7 @@ public class LineDrawing : MonoBehaviour
     private bool isDrawing = false;
     public GameObject line;
     private GameObject currentLine;
+    public GameObject connected;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,12 +23,14 @@ public class LineDrawing : MonoBehaviour
             manager.isDrawing = true;
             isDrawing = true;
             currentLine = Instantiate(line);
+            Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f);
+            Vector3[] vArray = { transform.position, Camera.main.ScreenToWorldPoint(mousePos) };
+            currentLine.GetComponent<LineRenderer>().SetPositions(vArray);
         }
         if (isDrawing)
         {
             Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f);
-            Vector3[] vArray = { transform.position,  Camera.main.ScreenToWorldPoint(mousePos)};
-            line.GetComponent<LineRenderer>().SetPositions(vArray);
+            currentLine.GetComponent<LineRenderer>().SetPosition(1, Camera.main.ScreenToWorldPoint(mousePos));
         }
         if (Input.GetMouseButtonUp(0))
         {
