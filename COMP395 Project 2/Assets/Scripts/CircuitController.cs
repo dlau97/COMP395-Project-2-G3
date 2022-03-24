@@ -14,7 +14,11 @@ public class CircuitController : MonoBehaviour
         } else if (gameObject.CompareTag("Resistor"))
         {
             component = new ResistorController(10);
-        } else
+        } else if (gameObject.CompareTag("Bulb"))
+        {
+            component = new LightbulbController(1);
+        }
+        else
         {
             component = new CircuitComponent();
         }
@@ -28,6 +32,10 @@ public class CircuitController : MonoBehaviour
         {
             CheckCircuit();
         }
+        if (gameObject.CompareTag("Bulb"))
+        {
+            gameObject.GetComponentInChildren<Light>().intensity = component.brightness;
+        }
     }
 
     public void SetNext(GameObject next)
@@ -35,8 +43,38 @@ public class CircuitController : MonoBehaviour
         component.setNextComponent(next);
     }
 
-    public void CheckCircuit()
+    public GameObject GetNext()
     {
-        //while ()
+        return component.getNextComponent();
+    }
+
+    public bool CheckCircuit()
+    {
+        GameObject currObj = component.getNextComponent();
+        int resistance = 0;
+        int voltage = component.getVoltage();
+        List<GameObject> bulbs = new List<GameObject>();
+        while (gameObject != currObj)
+        {
+            if (currObj == null) return false;
+            if (currObj.CompareTag("Battery"))
+            {
+                voltage += currObj.GetComponent<CircuitController>().component.getVoltage();
+            }
+            if (currObj.CompareTag("Resistor"))
+            {
+                resistance += currObj.GetComponent<CircuitController>().component.getResistance();
+            }
+            if (currObj.CompareTag("Bulb"))
+            {
+                bulbs.Add(currObj);
+            }
+            currObj = currObj.GetComponent<CircuitController>().GetNext();
+        }
+        foreach (GameObject bulb in bulbs)
+        {
+            bulb.GetComponent<CircuitController>().component.setBrightness(Mathf.Pow(voltage / resistance, 2) * resistance);
+        }
+        return true;
     }
 }

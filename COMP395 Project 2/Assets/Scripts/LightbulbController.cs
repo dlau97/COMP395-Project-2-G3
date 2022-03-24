@@ -6,6 +6,7 @@ public class LightbulbController : CircuitComponent
 {
     public bool isPowered = false;
     public float brightness = 1; //1 = Max brightness, 0 = min brightness
+    public float watts = 40f;
 
     public LightbulbController(float b = 1f){
         brightness = b;
@@ -27,5 +28,10 @@ public class LightbulbController : CircuitComponent
 
     public void setBrightness(float val){
         brightness = val;
+    }
+
+    public float getWatts()
+    {
+        return watts;
     }
 }

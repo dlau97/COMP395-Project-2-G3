@@ -38,7 +38,7 @@ public class LineDrawing : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         {
-            if (gameObject.CompareTag("Negative"))
+            if (gameObject.CompareTag("Negative") && manager.currentPole.transform.parent.gameObject != transform.parent.gameObject)
             {
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z + 10f));
                 if (1 > Vector2.Distance(transform.position, mousePos))
