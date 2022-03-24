@@ -43,7 +43,8 @@ public class LineDrawing : MonoBehaviour
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z + 10f));
                 if (1 > Vector2.Distance(transform.position, mousePos))
                 {
-                    manager.currentPole.GetComponent<LineDrawing>().SetNext(gameObject);
+                    manager.currentPole.transform.parent.gameObject.GetComponent<CircuitController>().SetNext(gameObject.transform.parent.gameObject);
+                    manager.currentPole.GetComponent<LineDrawing>().CleanUp(gameObject);
                 }
             } else
             {
@@ -54,9 +55,8 @@ public class LineDrawing : MonoBehaviour
         }
     }
 
-    public void SetNext(GameObject next)
+    public void CleanUp(GameObject next)
     {
-        connected = next;
         GameObject tempLine = Instantiate(line);
         tempLine.GetComponent<LineRenderer>().SetPosition(0, transform.position);
         tempLine.GetComponent<LineRenderer>().SetPosition(1, next.transform.position);
