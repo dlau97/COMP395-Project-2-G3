@@ -18,7 +18,7 @@ public class LineDrawing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && gameObject.CompareTag("Positive"))
+        if (Input.GetMouseButtonDown(0) && gameObject.CompareTag("Positive") && transform.parent.gameObject.GetComponent<CircuitController>().GetNext() == null)
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z + 10f));
             if (1 > Vector2.Distance(transform.position, mousePos))
