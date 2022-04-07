@@ -6,9 +6,11 @@ public class CircuitController : MonoBehaviour
 {
     public dynamic component;
     public float value = 0;
+    private GameManager manager;
     // Start is called before the first frame update
     void Start()
     {
+        manager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManager>();
         if (gameObject.CompareTag("Battery"))
         {
             component = new BatteryController(value);
@@ -31,7 +33,7 @@ public class CircuitController : MonoBehaviour
         //Debug.Log(component.getVoltage());
         if (gameObject.CompareTag("Battery") && Input.GetMouseButtonUp(0))
         {
-            CheckCircuit();
+            manager.CheckCircuit(gameObject);
         }
         if (gameObject.CompareTag("Bulb"))
         {
