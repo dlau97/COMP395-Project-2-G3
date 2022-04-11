@@ -5,7 +5,7 @@ using UnityEngine;
 public class LightbulbController : CircuitComponent
 {
     public bool isPowered = false;
-    public float brightness = 1; //1 = Max brightness, 0 = min brightness
+    public float brightness = 0; //1 = Max brightness, 0 = min brightness
     public float watts = 40f;
 
     public LightbulbController(float w = 40f){

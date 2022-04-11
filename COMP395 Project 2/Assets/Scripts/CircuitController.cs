@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CircuitController : MonoBehaviour
 {
     public dynamic component;
     public float value = 0;
     private GameManager manager;
+    public Text text;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,9 +16,11 @@ public class CircuitController : MonoBehaviour
         if (gameObject.CompareTag("Battery"))
         {
             component = new BatteryController(value);
+            text.text = value.ToString();
         } else if (gameObject.CompareTag("Resistor"))
         {
             component = new ResistorController(value);
+            text.text = value.ToString();
         } else if (gameObject.CompareTag("Bulb"))
         {
             component = new LightbulbController(value);
@@ -38,6 +42,7 @@ public class CircuitController : MonoBehaviour
         if (gameObject.CompareTag("Bulb"))
         {
             gameObject.GetComponentInChildren<Light>().intensity = component.brightness;
+            text.text = component.brightness.ToString();
         }
     }
 
