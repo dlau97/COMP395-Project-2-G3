@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Screen.SetResolution(1920, 1080, 0);
         text = new GameObject[levelTypeList.Length];
         for (int i = 0; i < levelTypeList.Length; i++)
         {
@@ -78,20 +79,10 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    bool CircuitComplete(GameObject batteryPos)
-    {
-        GameObject currObject = batteryPos.GetComponent<LineDrawing>().connected;
-        while (currObject != batteryPos) {
-            if (currObject == null) return false;
-            currObject = currObject.GetComponent<LineDrawing>().connected;
-        }
-        return true;
-    }
-
     public bool CheckCircuit(GameObject obj)
     {
         bool allGoals = true;
-        dynamic component = obj.GetComponent<CircuitController>().component;
+        BatteryController component = obj.GetComponent<CircuitController>().battComp;
         GameObject currObj = component.getNextComponent();
         float resistance = 0;
         float resistanceWBulbs = 0;
@@ -102,14 +93,15 @@ public class GameManager : MonoBehaviour
             if (currObj == null) return false;
             if (currObj.CompareTag("Battery"))
             {
-                voltage += currObj.GetComponent<CircuitController>().component.getVoltage();
+                voltage += currObj.GetComponent<CircuitController>().battComp.getVoltage();
             }
-            if (currObj.CompareTag("Resistor"))
+            else if (currObj.CompareTag("Resistor"))
             {
-                resistance += currObj.GetComponent<CircuitController>().component.getResistance();
+                resistance += currObj.GetComponent<CircuitController>().resComp.getResistance();
             }
-            if (currObj.CompareTag("Bulb"))
+            else if (currObj.CompareTag("Bulb"))
             {
+                LightbulbController battComp = currObj.GetComponent<CircuitController>().liComp;
                 bulbs.Add(currObj);
             }
             currObj = currObj.GetComponent<CircuitController>().GetNext();
@@ -117,11 +109,11 @@ public class GameManager : MonoBehaviour
         resistanceWBulbs = resistance;
         foreach (GameObject bulb in bulbs)
         {
-            resistanceWBulbs += bulb.GetComponent<CircuitController>().component.getResistance(voltage);
+            resistanceWBulbs += bulb.GetComponent<CircuitController>().liComp.getResistance(voltage);
         }
         foreach (GameObject bulb in bulbs)
         {
-            bulb.GetComponent<CircuitController>().component.setBrightness(Mathf.Pow(voltage / resistanceWBulbs, 2) * (resistance + bulb.GetComponent<CircuitController>().component.getResistance(voltage)));
+            bulb.GetComponent<CircuitController>().liComp.setBrightness(Mathf.Pow(voltage / resistanceWBulbs, 2) * (resistance + bulb.GetComponent<CircuitController>().liComp.getResistance(voltage)));
         }
         for (int i = 0; i < levelTypeList.Length; i++)
         {
@@ -130,7 +122,7 @@ public class GameManager : MonoBehaviour
                 bool completedGoal = true;
                 foreach (GameObject bulb in bulbs)
                 {
-                    if (bulb.GetComponent<CircuitController>().component.brightness < goal[i])
+                    if (bulb.GetComponent<CircuitController>().liComp.brightness < goal[i])
                     {
                         completedGoal = false;
                         allGoals = false;
@@ -146,7 +138,7 @@ public class GameManager : MonoBehaviour
                 bool completedGoal = true;
                 foreach (GameObject bulb in bulbs)
                 {
-                    if (bulb.GetComponent<CircuitController>().component.brightness >= goal[i])
+                    if (bulb.GetComponent<CircuitController>().liComp.brightness >= goal[i])
                     {
                         completedGoal = false;
                         allGoals = false;
