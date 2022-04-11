@@ -5,29 +5,30 @@ using UnityEngine.UI;
 
 public class CircuitController : MonoBehaviour
 {
-    public dynamic component;
     public float value = 0;
-    private GameManager manager;
     public Text text;
+    public BatteryController battComp;
+    public ResistorController resComp;
+    public LightbulbController liComp;
+    public CircuitComponent cirComp;
     // Start is called before the first frame update
     void Start()
     {
-        manager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManager>();
         if (gameObject.CompareTag("Battery"))
         {
-            component = new BatteryController(value);
+            battComp = new BatteryController(value);
             text.text = value.ToString();
         } else if (gameObject.CompareTag("Resistor"))
         {
-            component = new ResistorController(value);
+            resComp = new ResistorController(value);
             text.text = value.ToString();
         } else if (gameObject.CompareTag("Bulb"))
         {
-            component = new LightbulbController(value);
+            liComp = new LightbulbController(value);
         }
         else
         {
-            component = new CircuitComponent();
+            cirComp = new CircuitComponent();
             text.gameObject.transform.parent.gameObject.SetActive(false);
         }
     }
@@ -35,61 +36,50 @@ public class CircuitController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(component.getVoltage());
-        if (gameObject.CompareTag("Battery") && Input.GetMouseButtonUp(0))
-        {
-            manager.CheckCircuit(gameObject);
-        }
         if (gameObject.CompareTag("Bulb"))
         {
-            gameObject.GetComponentInChildren<Light>().intensity = component.brightness;
-            text.text = component.brightness.ToString("F2");
+            gameObject.GetComponentInChildren<Light>().intensity = liComp.brightness;
+            text.text = liComp.brightness.ToString("F2");
         }
     }
 
     public void SetNext(GameObject next)
     {
-        component.setNextComponent(next);
+        if (gameObject.CompareTag("Battery"))
+        {
+            battComp.setNextComponent(next);
+        }
+        else if (gameObject.CompareTag("Resistor"))
+        {
+            resComp.setNextComponent(next);
+        }
+        else if (gameObject.CompareTag("Bulb"))
+        {
+            liComp.setNextComponent(next);
+        }
+        else
+        {
+            cirComp.setNextComponent(next);
+        }
     }
 
     public GameObject GetNext()
     {
-        return component.getNextComponent();
-    }
-
-    public bool CheckCircuit()
-    {
-        GameObject currObj = component.getNextComponent();
-        float resistance = 0;
-        float resistanceWBulbs = 0;
-        float voltage = component.getVoltage();
-        List<GameObject> bulbs = new List<GameObject>();
-        while (gameObject != currObj)
+        if (gameObject.CompareTag("Battery"))
         {
-            if (currObj == null) return false;
-            if (currObj.CompareTag("Battery"))
-            {
-                voltage += currObj.GetComponent<CircuitController>().component.getVoltage();
-            }
-            if (currObj.CompareTag("Resistor"))
-            {
-                resistance += currObj.GetComponent<CircuitController>().component.getResistance();
-            }
-            if (currObj.CompareTag("Bulb"))
-            {
-                bulbs.Add(currObj);
-            }
-            currObj = currObj.GetComponent<CircuitController>().GetNext();
+            return battComp.getNextComponent();
         }
-        resistanceWBulbs = resistance;
-        foreach (GameObject bulb in bulbs)
+        else if (gameObject.CompareTag("Resistor"))
         {
-            resistanceWBulbs += bulb.GetComponent<CircuitController>().component.getResistance(voltage);
+            return resComp.getNextComponent();
         }
-        foreach (GameObject bulb in bulbs)
+        else if (gameObject.CompareTag("Bulb"))
         {
-            bulb.GetComponent<CircuitController>().component.setBrightness(Mathf.Pow(voltage / resistanceWBulbs, 2) * (resistance + bulb.GetComponent<CircuitController>().component.getResistance(voltage)));
+            return liComp.getNextComponent();
         }
-        return true;
+        else
+        {
+            return cirComp.getNextComponent();
+        }
     }
 }

@@ -46,6 +46,10 @@ public class LineDrawing : MonoBehaviour
                     manager.currentPole.transform.parent.gameObject.GetComponent<CircuitController>().SetNext(gameObject.transform.parent.gameObject);
                     manager.currentPole.GetComponent<LineDrawing>().CleanUp(gameObject);
                 }
+                if (gameObject.transform.parent.gameObject.CompareTag("Battery"))
+                {
+                    manager.CheckCircuit(gameObject.transform.parent.gameObject);
+                }
             } else
             {
                 manager.isDrawing = false;
