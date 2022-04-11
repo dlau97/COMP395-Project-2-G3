@@ -38,6 +38,7 @@ public class LightbulbController : CircuitComponent
 
     public float getResistance(float voltage)
     {
+        Debug.Log(watts);
         return Mathf.Pow(voltage, 2) / watts;
     }
 }

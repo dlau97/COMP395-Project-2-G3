@@ -28,6 +28,7 @@ public class CircuitController : MonoBehaviour
         else
         {
             component = new CircuitComponent();
+            text.gameObject.transform.parent.gameObject.SetActive(false);
         }
     }
 
@@ -42,7 +43,7 @@ public class CircuitController : MonoBehaviour
         if (gameObject.CompareTag("Bulb"))
         {
             gameObject.GetComponentInChildren<Light>().intensity = component.brightness;
-            text.text = component.brightness.ToString();
+            text.text = component.brightness.ToString("F2");
         }
     }
 
